@@ -1,3 +1,8 @@
 Library/
 ProjectSettings/
-
+TapHero/
+Assembly-CSharp-vs.csproj
+Assembly-CSharp.csproj
+TapHero-csharp.sln
+TapHero.sln
+TapHero.userprefs
