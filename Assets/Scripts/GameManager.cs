@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 using System.Collections;
@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	private short touchCount = 0;
 	private List<Character> charList;
 	public Text label_MonsterHP;
+	public Text[] label_Charactor;
 
 	public void Touch() {
 		touchCount++;
@@ -19,13 +20,21 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < 4; i++) {
 			uint attackTime = charList[i].getAttackTime();
 
+			//attack
 			if ((touchCount % attackTime) == 0) {
 				monsterHP -= (short)charList[i].getAT();
+
+				string charType = "";
+				GetCharactorTypeStr(charList[i].getType(), ref charType);
+
+				label_Charactor[i].text = charType + charList[i].getAT().ToString() + " Damage";
+
 
 				if (monsterHP <= 0)
 					NewCreateMonster();
 
 				label_MonsterHP.text = monsterHP.ToString();
+				StartCoroutine("RemoveText", label_Charactor[i]);
 			}
 		}
 	}
@@ -50,5 +59,27 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	IEnumerator RemoveText(Text text) {
+		yield return new WaitForSeconds(0.5f);
+		text.text = "";
+	}
+
+	private void GetCharactorTypeStr(byte charType, ref string charStr) {
+		switch(charType) {
+		case (byte)CharacterType.kKnight:
+			charStr = "Knight";
+			break;
+		case (byte)CharacterType.kArcher:
+			charStr = "Archer";
+			break;
+		case (byte)CharacterType.kMagician:
+			charStr = "Magician";
+			break;
+		case (byte)CharacterType.kRogue:
+			charStr = "Rogue";
+			break;
+		}
 	}
 }
